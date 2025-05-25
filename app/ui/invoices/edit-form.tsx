@@ -21,10 +21,14 @@ export default function EditInvoiceForm({
 }) {
   const initialState: State = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const [state, formAction, isPending] = useActionState(
+    updateInvoiceWithId,
+    initialState
+  );
 
   return (
     <form action={formAction}>
+      <p>{isPending && 'pending...'}</p>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -145,7 +149,12 @@ export default function EditInvoiceForm({
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200">
           Cancel
         </Link>
-        <Button type="submit">Edit Invoice</Button>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="disabled:cursor-progress disabled:opacity-80">
+          Edit Invoice
+        </Button>
       </div>
     </form>
   );
